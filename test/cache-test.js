@@ -32,7 +32,7 @@ vows.describe('resourcer/resource/cache').addVows({
                 Article.get(43, this.callback);
             },
             "It should return the previous instance": function (res) {
-                assert.strictEqual (res, this.article);
+                assert.strictEqual (res._properties, this.article._properties);
             }
         },
         "and then loading it back up with `find()`": {
@@ -40,7 +40,7 @@ vows.describe('resourcer/resource/cache').addVows({
                 Article.find({ title: "The Last Article" }, this.callback);
             },
             "It should return the previous instance": function (res) {
-                assert.strictEqual (res[0], this.article);
+                assert.strictEqual (res[0]._properties, this.article._properties);
             }
         }
     }
