@@ -43,11 +43,21 @@ vows.describe('resourcer/engines/database').addVows({
         },
         "a create() request": {
             topic: function (r) {
-                r.create({ _id: '99', age: 30, hair: 'red'}, this.callback);
+                this.r = r;
+                r.create({ _id: 'charlie', age: 30, hair: 'red'}, this.callback);
             },
             "should respond with a `201`": function (e, res) {
                 assert.equal (res.status, 201);
             },
+            "followed by a get() request": {
+                topic: function (_, r) {
+                    r.get('charlie', this.callback);
+                },
+                "should respond with an object that has a revision": function (e, obj) {
+                  assert.equal(obj._id, 'charlie');
+                  assert.notEqual(obj._rev, undefined);
+                }
+            }
             //"should create the record in the db": {
             //    topic: function (_, r) {
             //        r.get(99, this.callback);
@@ -70,6 +80,7 @@ vows.describe('resourcer/engines/database').addVows({
                 },
                 "should respond with the right object": function (e, obj) {
                     assert.equal (obj._id, 'bob');
+                    assert.isNotNull (obj._rev);
                 }
             },
             "when unsuccessful": {
@@ -84,11 +95,24 @@ vows.describe('resourcer/engines/database').addVows({
             }
         },
         "an update() request": {
+            "from a get() request": {
+                "when successful": {
+                    topic: function (r) {
+                        that = this;
+                        r.get('bob', function (e, obj) {
+                            obj.update({ age: 45 }, that.callback);
+                        });
+                    },
+                    "should respond with 201": function (e, res) {
+                        assert.equal(res.status, 201);
+                    }
+                }
+            },
             "when successful": {
                 topic: function (r) {
                     return r.update('bob', { age: 45 }, this.callback);
                 },
-                "should respond with 201": function(res) {
+                "should respond with 201": function (res) {
                     assert.equal(res.status, 201);
                 }
             }
