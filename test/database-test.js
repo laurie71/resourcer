@@ -83,6 +83,16 @@ vows.describe('resourcer/engines/database').addVows({
                 }
             }
         },
+        "an update() request": {
+            "when successful": {
+                topic: function (r) {
+                    return r.update('bob', { age: 45 }, this.callback);
+                },
+                "should respond with 201": function(res) {
+                    assert.equal(res.status, 201);
+                }
+            }
+        }
         /*"a find() request": {
             // Remark: Database engine currently doesn't support 'find', should we add it?
             "when successful": {
