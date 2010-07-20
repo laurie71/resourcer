@@ -58,7 +58,7 @@ vows.describe('resourcer/engines/database').addVows({
             //    }
             //}
         },
-        /*"a get() request": {
+        "a get() request": {
             "when successful": {
                 topic: function (r) {
                     return r.get('bob', this.callback);
@@ -82,7 +82,7 @@ vows.describe('resourcer/engines/database').addVows({
                     assert.isUndefined (obj);
                 }
             }
-        },*/
+        },
         /*"a find() request": {
             // Remark: Database engine currently doesn't support 'find', should we add it?
             "when successful": {
