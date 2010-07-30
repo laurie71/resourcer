@@ -66,7 +66,7 @@ vows.describe('resourcer/resource/view').addVows({
                     this.Article = Article;
                     Article.published(this.callback);
                 },
-                "should return an array of all published Articles": function (res) {
+                "should return an array of all published Articles": function (e, res) {
                     var that = this;
                     assert.isArray (res);
                     assert.length  (res, 3);
@@ -83,7 +83,7 @@ vows.describe('resourcer/resource/view').addVows({
                 topic: function (Article) {
                     Article.all(this.callback);
                 },
-                "should return an array of all Article records": function (res) {
+                "should return an array of all Article records": function (e, res) {
                     assert.isArray (res);
                     assert.length  (res, 5);
                 }
@@ -92,7 +92,7 @@ vows.describe('resourcer/resource/view').addVows({
                 topic: function (Article) {
                     Article.by('cloudhead', this.callback);
                 },
-                "should return an array of Article records by 'cloudhead'": function (res) {
+                "should return an array of Article records by 'cloudhead'": function (e, res) {
                     assert.isArray (res);
                     assert.length  (res, 3);
                     res.forEach(function (d) {
@@ -106,7 +106,7 @@ vows.describe('resourcer/resource/view').addVows({
                 topic: function (Article) {
                     Article.by('yoda', this.callback);
                 },
-                "should return an array of Article records by 'yoda'": function (res) {
+                "should return an array of Article records by 'yoda'": function (e, res) {
                     assert.isArray (res);
                     assert.length  (res, 1);
                     assert.equal   (res[0].author, 'yoda');

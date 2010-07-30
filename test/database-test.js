@@ -43,7 +43,6 @@ vows.describe('resourcer/engines/database').addVows({
         },
         "a create() request": {
             topic: function (r) {
-                this.r = r;
                 r.create({ _id: 'charlie', age: 30, hair: 'red'}, this.callback);
             },
             "should respond with a `201`": function (e, res) {
@@ -58,15 +57,6 @@ vows.describe('resourcer/engines/database').addVows({
                   assert.notEqual(obj._rev, undefined);
                 }
             }
-            //"should create the record in the db": {
-            //    topic: function (_, r) {
-            //        r.get(99, this.callback);
-            //    },
-            //    "which can then be retrieved": function (e, res) {
-            //        assert.isObject (resourcer.connection.store[99]);
-            //        assert.equal    (resourcer.connection.store[99].age, 30);
-            //    }
-            //}
         },
         "a get() request": {
             "when successful": {
@@ -116,39 +106,6 @@ vows.describe('resourcer/engines/database').addVows({
                     assert.equal(res.status, 201);
                 }
             }
-        }
-        /*"a find() request": {
-            // Remark: Database engine currently doesn't support 'find', should we add it?
-            "when successful": {
-                topic: function (r) {
-                    r.find({ hair: "black" }, this.callback);
-                },
-                "should respond with an array of length 2": function (e, obj) {
-                    assert.length (obj, 2);
-                },
-                "should respond with an array of Resource instances": function (e, obj) {
-                    assert.isArray    (obj);
-                    assert.instanceOf (obj[0], resourcer.resources.Resource);
-                    assert.instanceOf (obj[1], resourcer.resources.Resource);
-                }
-            },
-            "when unsuccessful": {
-                topic: function (r) { r.find({ hair: "blue" }, this.callback); },
-                "should respond with an empty array": function (e, obj) {
-                    assert.isArray (obj);
-                    assert.length  (obj, 0)
-                }
-            }
         },
-        "an all() request": {
-            // Remark: Database engine currently doesn't support 'all', should we add it?
-            topic: function (r) {
-                r.all(this.callback);
-            },
-            "should respond with an array of all records": function (e, obj) {
-                assert.isArray (obj);
-                assert.length  (obj, 3);
-            }
-        },*/
     }
 }).export(module);
