@@ -7,11 +7,9 @@ var path = require('path'),
 
 require.paths.unshift(path.join(__dirname, '..', 'lib'));
 
-var cradle = require('cradle');
-
-var vows = require('vows');
-
-var resourcer = require('resourcer');
+var cradle = require('cradle'),
+    vows = require('vows'),
+    resourcer = require('resourcer');
 
 resourcer.env = 'test';
 
@@ -66,5 +64,22 @@ vows.describe('resourcer/resource/relationship').addBatch({
         "should respond to the child filters": function (R) {
             assert.isFunction (R.phone);
         },
+        "can be used to query the database:": {
+            "<phone>": {
+                topic: function (Contact) {
+                    this.Contact = Contact;
+                    Contact.phone(this.callback);
+                },
+                "should return an array of all published Articles": function (e, res) {
+                    var that = this;
+                    assert.isArray (res);
+                    assert.length  (res, 9);
+                    res.forEach(function (d) {
+                        assert.isObject   (d);
+                        assert.equal      (d.resource, 'Phone');
+                    });
+                }
+            },
+        }
     }
 }).export(module);
