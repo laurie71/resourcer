@@ -1,17 +1,14 @@
+require.paths.unshift(require('path').join(__dirname, '..', 'lib'));
+
 var path = require('path'),
     sys = require('sys'),
     assert = require('assert'),
     events = require('events'),
     http = require('http'),
-    fs = require('fs');
-
-require.paths.unshift(path.join(__dirname, '..', 'lib'));
-
-var cradle = require('cradle');
-
-var vows = require('vows');
-
-var resourcer = require('resourcer');
+    fs = require('fs'),
+    cradle = require('cradle'),
+    vows = require('vows'),
+    resourcer = require('resourcer');
 
 var numberOfArticles = 5;
 
@@ -25,7 +22,7 @@ vows.describe('resourcer/resource/view').addVows({
             var db = new(cradle.Connection)().database('test');
             db.destroy(function () {
                 db.create(function () {
-                    db.insert([
+                    db.save([
                         { resource: 'Article', title: 'The Great Gatsby', published: true,  author: 'fitzgerald', tags: ['classic'] },    
                         { resource: 'Article', title: 'Finding vim',      published: false, author: 'cloudhead', tags: ['hacking', 'vi'] },    
                         { resource: 'Article', title: 'On Writing',       published: true,  author: 'cloudhead', tags: ['writing'] },    

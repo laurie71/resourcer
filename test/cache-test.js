@@ -1,13 +1,11 @@
+require.paths.unshift(require('path').join(__dirname, '..', 'lib'));
+
 var path = require('path'),
     sys = require('sys'),
     events = require('events'),
-    assert = require('assert');
-
-var vows = require('vows');
-
-require.paths.unshift(path.join(__dirname, '..', 'lib'));
-
-var resourcer = require('resourcer');
+    assert = require('assert'),
+    vows = require('vows'),
+    resourcer = require('resourcer');
 
 var connection = new(resourcer.engines.memory.Connection)('cache-test').load([
     { resource: 'Article', title: 'The Great Gatsby', published: true,  author: 'fitzgerald'},    

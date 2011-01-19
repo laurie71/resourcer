@@ -1,15 +1,13 @@
+require.paths.unshift(require('path').join(__dirname, '..', 'lib'));
+
 var path = require('path'),
     sys = require('sys'),
     assert = require('assert'),
     events = require('events'),
     http = require('http'),
-    fs = require('fs');
-
-require.paths.unshift(path.join(__dirname, '..', 'lib'));
-
-var vows = require('vows');
-
-var resourcer = require('resourcer');
+    fs = require('fs'),
+    vows = require('vows'),
+    resourcer = require('resourcer');
 
 vows.describe('resourcer/events').addVows({
     "an Article": {

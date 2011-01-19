@@ -1,16 +1,14 @@
+require.paths.unshift(require('path').join(__dirname, '..', 'lib'));
+
 var path = require('path'),
     sys = require('sys'),
     assert = require('assert'),
     events = require('events'),
     http = require('http'),
-    fs = require('fs');
-
-require.paths.unshift(path.join(__dirname, '..', 'lib'));
-
-var vows = require('vows');
-
-var resourcer = require('resourcer');
-var validator = require('resourcer/validator');
+    fs = require('fs'),
+    vows = require('vows'),
+    resourcer = require('resourcer'),
+    validator = require('resourcer/validator');
 
 function assertInvalid(res) {
     assert.isObject    (res);
@@ -116,7 +114,7 @@ vows.describe('resourcer/validator').addVows({
                         pattern: /[a-z ]+/
                     }
                 },
-                author:    { type: 'string', pattern: /^[\w ]+$/i },
+                author:    { type: 'string', pattern: /^[\w ]+$/i, optional: false },
                 published: { type: 'boolean', 'default': false },
                 category:  { type: 'string' }
             }

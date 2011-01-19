@@ -1,17 +1,14 @@
+require.paths.unshift(require('path').join(__dirname, '..', 'lib'));
+
 var path = require('path'),
     sys = require('sys'),
     assert = require('assert'),
     events = require('events'),
     http = require('http'),
-    fs = require('fs');
-
-require.paths.unshift(path.join(__dirname, '..', 'lib'));
-
-var vows = require('vows');
-var eyes = require('eyes');
-var cradle = require('cradle');
-
-var resourcer = require('resourcer');
+    fs = require('fs'),
+    vows = require('vows'),
+    cradle = require('cradle'),
+    resourcer = require('resourcer');
 
 vows.describe('resourcer').addVows({
     "Resource()": {
@@ -24,6 +21,7 @@ vows.describe('resourcer').addVows({
             },
             "and has the create/get/all/find methods": function (Factory) {
                 assert.isFunction (Factory.create);
+                assert.isFunction (Factory.destroy);
                 assert.isFunction (Factory.get);
                 assert.isFunction (Factory.all);
                 assert.isFunction (Factory.find);
@@ -36,6 +34,7 @@ vows.describe('resourcer').addVows({
                     assert.isFunction (resource.save);
                     assert.isFunction (resource.update);
                     assert.isFunction (resource.destroy);
+                    assert.isFunction (resource.reload);
                 }
             }
         }
@@ -112,6 +111,29 @@ vows.describe('resourcer').addVows({
             assert.include (r.properties, 'title');
             assert.include (r.properties, 'kind');
         },
+        "When instantiated": {
+            topic: function (R) {
+                return new(R)({ title: 'The Great Gatsby' });
+            },
+            "should respond to toString()": function (r) {
+                assert.equal (r.toString(), '{"title":"The Great Gatsby","resource":"Resource"}');
+            },
+            "should respond to toJSON()": function (r) {
+                assert.isObject (r.toJSON());
+            },
+            "should return the attributes, when `Object.keys` is called": function (r) {
+                var keys = Object.keys(r);
+                assert.include (keys, '_id');
+                assert.include (keys, 'title');
+                assert.include (keys, 'kind');
+                assert.include (keys, 'resource');
+                assert.length  (keys, 4);
+            },
+            "should set the unspecified values to `undefined`": function (r) {
+                assert.include     (r, 'kind');
+                assert.isUndefined (r.kind);
+            }
+        }
     },
     "A Resource with duplicate properties": {
         topic: function () {
@@ -330,10 +352,12 @@ vows.describe('resourcer').addVows({
                 },
                 "a create() request": {
                     topic: function (r) {
+                        this.Factory = r;
                         r.create({ _id: 99, age: 30, hair: 'red'}, this.callback);
                     },
-                    "should respond with a `201`": function (e, res) {
-                        assert.equal (res.status, 201);
+                    "should return the newly created object": function (e, obj) {
+                        assert.instanceOf(obj, this.Factory);
+                        assert.equal(obj.id, 99);
                     },
                     "should create the record in the db": function (e, res) {
                         assert.isObject (resourcer.connection.store[99]);
@@ -418,8 +442,8 @@ vows.describe('resourcer').addVows({
                         assert.strictEqual (this.r.isNewRecord, false);
                     },
                     "and an update query": {
-                        topic: function (r) {
-                            this.r.update({ name: "bobby" }, this.callback);
+                        topic: function (_, r) {
+                            r.update({ name: "bobby" }, this.callback);
                         },
                         "should return a 200": function (res) {
                             assert.equal (res.status, 200);
@@ -451,8 +475,8 @@ vows.describe('resourcer').addVows({
                         assert.equal (this.connection.store[55].resource, "User");
                     },
                     "and an update query": {
-                        topic: function (r) {
-                            this.r.update({ name: "bobby" }, this.callback);
+                        topic: function (_, r) {
+                            r.update({ name: "bobby" }, this.callback);
                         },
                         "should update the document": function (res) {
                             assert.equal (this.connection.store[55].name, "bobby");

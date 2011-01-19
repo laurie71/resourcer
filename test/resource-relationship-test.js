@@ -1,13 +1,12 @@
+require.paths.unshift(require('path').join(__dirname, '..', 'lib'));
+
 var path = require('path'),
     sys = require('sys'),
     assert = require('assert'),
     events = require('events'),
     http = require('http'),
-    fs = require('fs');
-
-require.paths.unshift(path.join(__dirname, '..', 'lib'));
-
-var cradle = require('cradle'),
+    fs = require('fs'),
+    cradle = require('cradle'),
     vows = require('vows'),
     resourcer = require('resourcer');
 
@@ -21,7 +20,7 @@ vows.describe('resourcer/resource/relationship').addBatch({
             var db = new(cradle.Connection)().database('test');
             db.destroy(function () {
                 db.create(function () {
-                    db.insert([
+                    db.save([
                         { resource: 'Contact', _id: 'indexzero',  name: 'indexzero', address: '123 Nowhere St.', },    
                         { resource: 'Contact', _id: 'cloudhead',  name: 'cloudhead', address: '123 Rue Nowhere', },    
                         { resource: 'Contact', _id: 'marak',      name: 'marak',     address: '123 Nowhere St.', },    
