@@ -22,7 +22,7 @@ var Article = resourcer.defineResource('Article', function () {
 vows.describe('resourcer/resource/cache').addVows({
     "When creating an instance, and saving it": {
         topic: function () {
-            this.article = new(Article)({ _id: 43, title: "The Last Article" });
+            this.article = new(Article)({ _id: 43, title: "The Last Article", published: true });
             this.article.save(this.callback);
         },
         "and then loading it back up with `get()`": {
@@ -45,7 +45,7 @@ vows.describe('resourcer/resource/cache').addVows({
 }).addVows({
     "When creating an instance, and saving it": {
         topic: function () {
-            this.article = new(Article)({ _id: 43, title: "The Last Article" });
+            this.article = new(Article)({ _id: 43, title: "The Last Article", published: true });
             this.article.save(this.callback);
         },
         "and then clearing the cache and loading it back up with `get()`": {
