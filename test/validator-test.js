@@ -32,7 +32,7 @@ function assertValidates(passingValue, failingValue, attributes) {
         properties: { field: {} }
     };
     var attr = Object.keys(attributes)[0];
-    resourcer.mixin(schema.properties.field, attributes); 
+    resourcer.mixin(schema.properties.field, attributes);
 
     return {
         "when the object conforms": {
@@ -116,7 +116,7 @@ vows.describe('resourcer/validator').addVows({
                 },
                 author:    { type: 'string', pattern: /^[\w ]+$/i, optional: false },
                 published: { type: 'boolean', 'default': false },
-                category:  { type: 'string' }
+                category:  { type: 'string', required: true }
             }
         },
         "and an object": {
@@ -134,7 +134,7 @@ vows.describe('resourcer/validator').addVows({
                     topic: function (object, schema) {
                         return validator.validate(object, schema);
                     },
-                    "return an object with the `valid` property set to true": assertValid, 
+                    "return an object with the `valid` property set to true": assertValid,
                     "return an object with the `errors` property as an empty array": function (res) {
                         assert.isArray (res.errors);
                         assert.isEmpty (res.errors);
@@ -148,6 +148,15 @@ vows.describe('resourcer/validator').addVows({
                     },
                     "return an object with `valid` set to false":       assertInvalid,
                     "and an error concerning the 'optional' attribute": assertHasError('optional')
+                },
+                "and if it has a missing required property": {
+                    topic: function (object, schema) {
+                        object = resourcer.clone(object);
+                        delete object.category;
+                        return validator.validate(object, schema);
+                    },
+                    "return an object with `valid` set to false":       assertInvalid,
+                    "and an error concerning the 'required' attribute": assertHasError('required')
                 },
                 "and if it didn't validate a pattern": {
                     topic: function (object, schema) {
