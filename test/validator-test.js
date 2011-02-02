@@ -122,7 +122,7 @@ vows.describe('resourcer/validator').addVows({
         "and an object": {
             topic: {
                 title: 'Gimme some Gurus',
-                date: new(Date)().toUTCString(),
+                date: '2011-02-01',
                 body: "And I will pwn your codex.",
                 tags: ['energy drinks', 'code'],
                 author: 'cloudhead',
